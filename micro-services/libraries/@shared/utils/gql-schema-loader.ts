@@ -3,7 +3,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import * as path from 'path';
 
 const loadQueries = (dirname: string): GraphQLObjectType => {
-  const resolverList = fileLoader(path.join(dirname, './**/*.resolver.js'));
+  const resolverList = fileLoader(path.join(dirname, './**/resolvers.js'));
   const resolvers = resolverList.reduce((acc, resolver) => ({ ...acc, ...resolver }), {});
 
   return new GraphQLObjectType({
@@ -25,5 +25,5 @@ const loadMutations = (dirname: string): GraphQLObjectType => {
 export const GQLSchemaLoader = (dirname: string) =>
   new GraphQLSchema({
     query: loadQueries(dirname),
-    mutation: loadMutations(dirname),
+    // mutation: loadMutations(dirname),
   });
