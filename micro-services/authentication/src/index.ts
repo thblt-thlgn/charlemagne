@@ -1,13 +1,12 @@
 import 'source-map-support/register';
 import './config/module-alias';
 import ENVIRONMENT from './config/environment';
+import { schema } from './entity';
 
 import { GraphQLServer } from 'graphql-yoga';
-import { typeDefs, resolvers } from './entity';
 
 const server = new GraphQLServer({
-  typeDefs,
-  resolvers,
+  schema,
 });
 
 server.start({ port: ENVIRONMENT.SERVER_PORT }, () =>

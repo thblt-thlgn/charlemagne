@@ -1,4 +1,3 @@
-import { loadResolvers, loadSchemas } from '@shared/utils';
+import { GQLSchemaLoader } from '@shared/utils';
 
-export const typeDefs = loadSchemas();
-export const resolvers = loadResolvers(__dirname);
+export const schema = GQLSchemaLoader(__dirname);

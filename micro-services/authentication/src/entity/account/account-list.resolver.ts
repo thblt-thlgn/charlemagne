@@ -1,4 +1,7 @@
-const accountList = async () => {
+import { Account } from './schema';
+import { GraphQLFieldConfig, GraphQLList, GraphQLNonNull } from 'graphql';
+
+const accountListResolver = async () => {
   return [
     {
       id: 1,
@@ -7,4 +10,7 @@ const accountList = async () => {
   ];
 };
 
-export default accountList;
+export const accountList: GraphQLFieldConfig<void, void> = {
+  type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Account))),
+  resolve: accountListResolver,
+};
