@@ -1,4 +1,4 @@
-import { Account } from './schema';
+import { Account } from './account.schema';
 import { GraphQLFieldConfig } from 'graphql';
 import { GQLNonNullableList } from '@shared/utils';
 

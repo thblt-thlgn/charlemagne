@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLNonNull, GraphQLFieldConfig } from 'graphql';
-import { Account } from './schema';
+import { Account } from './account.schema';
 
 const accountResolver = async () => {
   return {
