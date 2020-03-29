@@ -1,5 +1,6 @@
 import { Account } from './schema';
-import { GraphQLFieldConfig, GraphQLList, GraphQLNonNull } from 'graphql';
+import { GraphQLFieldConfig } from 'graphql';
+import { GQLNonNullableList } from '@shared/utils';
 
 const accountListResolver = async () => {
   return [
@@ -11,6 +12,6 @@ const accountListResolver = async () => {
 };
 
 export const accountList: GraphQLFieldConfig<void, void> = {
-  type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Account))),
+  type: GQLNonNullableList(Account),
   resolve: accountListResolver,
 };
