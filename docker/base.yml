@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  postgres:
+    build: postgres
+    container_name: charlemagne_postgres
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - private_network
+
+networks:
+  private_network:
+
+volumes:
+  database:
