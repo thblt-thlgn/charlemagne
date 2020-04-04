@@ -3,7 +3,7 @@ import { sequelize } from 'src/config/database';
 import { Transaction } from 'sequelize/types';
 import { pick } from 'lodash';
 import * as crypto from 'crypto';
-import Account from './model';
+import Account from '../../database/models/account';
 import { InvalidCredentialsError } from '@src/ts';
 import { Credential } from '@src/ts/interfaces';
 

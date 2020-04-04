@@ -7,7 +7,7 @@ import {
   ForeignKey,
   PrimaryKey,
 } from 'sequelize-typescript';
-import Account from '../account/model';
+import Account from './account';
 import { RequestData } from '@src/ts/interfaces';
 
 @Table({

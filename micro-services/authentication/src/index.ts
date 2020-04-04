@@ -1,7 +1,7 @@
 import 'source-map-support/register';
 import './config/module-alias';
 import ENVIRONMENT from './config/environment';
-import { schema } from './entity';
+import { schema } from './gql';
 import { express as userAgent } from 'express-useragent';
 import { GraphQLServer } from 'graphql-yoga';
 

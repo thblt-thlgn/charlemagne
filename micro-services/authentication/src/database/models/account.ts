@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 import { ACCOUNT_ROLE } from '@shared/ts';
-import RefreshToken from '../refresh-token/model';
+import RefreshToken from './refresh-token';
 
 @Table({
   underscored: true,

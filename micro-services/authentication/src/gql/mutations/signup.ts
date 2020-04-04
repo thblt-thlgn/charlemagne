@@ -1,7 +1,7 @@
 import { sequelize } from 'src/config/database';
 import { Transaction } from 'sequelize/types';
 import * as crypto from 'crypto';
-import Account from './model';
+import Account from '../../database/models/account';
 import { ACCOUNT_ROLE } from '@shared/ts';
 import { Credential } from '@src/ts/interfaces';
 
