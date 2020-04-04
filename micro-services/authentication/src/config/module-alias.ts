@@ -7,4 +7,5 @@ const ROOT = path.resolve();
 
 if (process.env.NODE_ENV === 'development') {
   moduleAlias.addAlias('@shared', path.join(ROOT, '../libraries/dist/@shared'));
+  moduleAlias.addAlias('@src', path.join(ROOT, 'dist'));
 }

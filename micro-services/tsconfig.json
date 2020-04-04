@@ -2,10 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "resolveJsonModule": true,
-    "target": "es6",
+    "target": "es2020",
     "moduleResolution": "node",
     "sourceMap": true,
-    "lib": ["es2018"],
+    "lib": ["es2020"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
@@ -17,6 +17,7 @@
     "strictPropertyInitialization": false,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "removeComments": true
+    "removeComments": true,
+    "skipLibCheck": true
   }
 }

@@ -15,7 +15,7 @@ import { RequestData } from '@src/ts/interfaces';
   timestamps: true,
   paranoid: true,
 })
-export class RefreshToken extends Model<RefreshToken> implements RequestData {
+export default class RefreshToken extends Model<RefreshToken> implements RequestData {
   @PrimaryKey
   @Column
   id: string;
@@ -45,5 +45,3 @@ export class RefreshToken extends Model<RefreshToken> implements RequestData {
   @Column
   expiry: Date;
 }
-
-export default RefreshToken;
