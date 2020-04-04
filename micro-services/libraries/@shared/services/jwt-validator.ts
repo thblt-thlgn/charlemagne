@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 
 export class JWTValidator {
-  public jwtOptions = {
+  public jwtOptions: jwt.SignOptions = {
     issuer: 'Charlemagne',
     algorithm: 'RS256',
     audience: 'localhost',

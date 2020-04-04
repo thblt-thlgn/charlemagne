@@ -6,7 +6,8 @@
     "sourceMap": true,
     "declaration": true,
     "paths": {
-      "@shared/*": ["../libraries/dist/@shared/*"]
+      "@shared/*": ["../libraries/dist/@shared/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "references": [{ "path": "../libraries" }],

@@ -8,13 +8,14 @@ import {
   PrimaryKey,
 } from 'sequelize-typescript';
 import Account from '../account/model';
+import { RequestData } from '@src/ts/interfaces';
 
 @Table({
   underscored: true,
   timestamps: true,
   paranoid: true,
 })
-export class RefreshToken extends Model<RefreshToken> {
+export class RefreshToken extends Model<RefreshToken> implements RequestData {
   @PrimaryKey
   @Column
   id: string;
@@ -43,13 +44,6 @@ export class RefreshToken extends Model<RefreshToken> {
 
   @Column
   expiry: Date;
-
-  @Column({
-    type: DataType.VIRTUAL,
-    get: () => 'RefreshToken',
-  })
-  // tslint:disable-next-line: variable-name
-  _type: string;
 }
 
 export default RefreshToken;
