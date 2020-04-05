@@ -1,6 +1,6 @@
 import * as geoip from 'geoip-lite';
 import { Request } from 'express';
-import { RequestData } from '@src/ts/interfaces';
+import { RequestData } from '@src/ts';
 
 export const extractRequestData = (req: Request): RequestData => {
   const { browser = null, version: browserVersion = null, os = null } = req.useragent || {};

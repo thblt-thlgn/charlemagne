@@ -1,29 +1,14 @@
 import { sequelize } from '@src/config/database';
-import { Credential } from '@src/ts/interfaces';
 import { Account } from '@src/models';
-import { InvalidCredentialsError, ResourceNotFoundError } from '@src/ts';
-import { jwtManager } from '@src/config/jwt-manager';
+import { InvalidCredentialsError, ResourceNotFoundError, Credential } from '@src/ts';
 import { Transaction, WhereOptions, FindOptions } from 'sequelize/types';
 import * as crypto from 'crypto';
 import { ACCOUNT_ROLE } from '@shared/ts';
-import { pick } from 'lodash';
 import { Service } from 'typedi';
 
 @Service()
 export default class AccountRepository {
   private repository = sequelize.getRepository(Account);
-
-  private filter(account: Account) {
-    return pick(account.toJSON(), [
-      'id',
-      'email',
-      'role',
-      'provider',
-      'createdAt',
-      'updatedAt',
-      'verifiedAt',
-    ]);
-  }
 
   public async login({ email, password }: Credential, transaction?: Transaction) {
     const account = await this.find({ email }, transaction).catch(() =>
@@ -40,8 +25,7 @@ export default class AccountRepository {
       throw new InvalidCredentialsError();
     }
 
-    const jwt = jwtManager.sign(account, this.filter(account));
-    return { jwt, account };
+    return account;
   }
 
   public signup({ email, password }: Credential, transaction?: Transaction) {

@@ -13,6 +13,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "date-fns": "^2.11.1",
     "dotenv": "^8.2.0",
     "express-useragent": "^1.0.13",
     "geoip-lite": "^1.4.1",
@@ -27,7 +28,8 @@
     "source-map-support": "^0.5.16",
     "type-graphql": "^0.17.6",
     "typedi": "^0.8.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "uuid": "^7.0.3"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.30",
@@ -37,6 +39,7 @@
     "@types/lodash": "^4.14.149",
     "@types/module-alias": "^2.0.0",
     "@types/node": "^13.9.5",
+    "@types/uuid": "^7.0.2",
     "@types/ws": "^7.2.3",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",

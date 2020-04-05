@@ -3,12 +3,12 @@ import { ACCOUNT_ROLE } from '@shared/ts';
 import RefreshToken from './refresh-token';
 import { ObjectType, Field, ID } from 'type-graphql';
 
-@ObjectType()
 @Table({
   underscored: true,
   timestamps: true,
   paranoid: true,
 })
+@ObjectType()
 export default class Account extends Model<Account> {
   @Field(() => ID)
   id: number;
