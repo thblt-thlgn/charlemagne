@@ -1,27 +1,12 @@
-import { Account } from '@src/models';
-import { Resolver, Query, Mutation, Arg, InputType, Field, Ctx, ObjectType } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
 import { AccountRepository, RefreshTokenRepository } from '@src/repositories';
 import { Service } from 'typedi';
 import { Context } from '@src/ts';
+import { Account } from '@src/models';
 import { sequelize } from '@src/config/database';
 import { jwtManager } from '@src/config/jwt-manager';
-
-@InputType()
-class CredentialInput {
-  @Field()
-  email: string;
-
-  @Field()
-  password: string;
-}
-
-@ObjectType()
-class CredentialOutput {
-  @Field()
-  jwt: string;
-  @Field()
-  refreshToken: string;
-}
+import { CredentialInput } from './inputs';
+import { CredentialOutput } from './outputs';
 
 @Service()
 @Resolver(Account)
@@ -32,12 +17,12 @@ export default class AccountResolver {
   ) {}
 
   @Query(() => Account)
-  async account(@Arg('id') id: number) {
+  async account(@Arg('id') id: number): Promise<Account> {
     return this.accountRepo.find({ where: { id } });
   }
 
   @Query(() => [Account])
-  async accountList() {
+  async accountList(): Promise<Account[]> {
     return this.accountRepo.findAll();
   }
 

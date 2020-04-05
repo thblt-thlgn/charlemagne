@@ -5,24 +5,8 @@ import { RefreshTokenRepository, AccountRepository } from '@src/repositories';
 import { sequelize } from '@src/config/database';
 import { jwtManager } from '@src/config/jwt-manager';
 import { Context } from 'graphql-yoga/dist/types';
-
-@InputType()
-class DisconnectInput {
-  @Field()
-  id: string;
-
-  @Field()
-  accountId: number;
-}
-
-@InputType()
-class RefreshInput {
-  @Field()
-  refreshToken: string;
-
-  @Field()
-  accountId: number;
-}
+import { DisconnectInput, RefreshInput } from './inputs';
+import { CredentialOutput } from './outputs';
 
 @Service()
 @Resolver(RefreshToken)
@@ -33,12 +17,14 @@ export default class RefreshTokenResolver {
   ) {}
 
   @Query(() => RefreshToken)
-  async refreshToken(@Arg('id') id: string) {
+  async refreshToken(@Arg('id') id: string): Promise<RefreshToken> {
     return this.refreshTokenRepo.find({ where: { id } });
   }
 
   @Query(() => [RefreshToken])
-  async refreshTokenList(@Arg('accoundId', { nullable: true }) accountId?: number) {
+  async refreshTokenList(
+    @Arg('accoundId', { nullable: true }) accountId?: number,
+  ): Promise<RefreshToken[]> {
     const opts = accountId ? { where: { accountId } } : {};
     return this.refreshTokenRepo.findAll(opts);
   }
@@ -46,11 +32,15 @@ export default class RefreshTokenResolver {
   @Mutation(() => Boolean)
   async disconnect(@Arg('params') params: DisconnectInput) {
     // TODO: check if jwt token has autorizations
-    return this.refreshTokenRepo.remove(params.id, params.accountId);
+    await this.refreshTokenRepo.remove(params.id, params.accountId);
+    return true;
   }
 
-  @Mutation(() => Boolean)
-  async refresh(@Arg('params') params: RefreshInput, @Ctx() ctx: Context) {
+  @Mutation(() => CredentialOutput)
+  async refresh(
+    @Arg('params') params: RefreshInput,
+    @Ctx() ctx: Context,
+  ): Promise<CredentialOutput> {
     const { requestData } = ctx;
     const { refreshToken, accountId } = params;
 
