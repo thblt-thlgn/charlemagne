@@ -3,14 +3,18 @@ import { Credential } from '@src/ts/interfaces';
 import { Account } from '@src/models';
 import { InvalidCredentialsError, ResourceNotFoundError } from '@src/ts';
 import { jwtManager } from '@src/config/jwt-manager';
-import { Transaction, WhereOptions } from 'sequelize/types';
+import { Transaction, WhereOptions, FindOptions } from 'sequelize/types';
 import * as crypto from 'crypto';
 import { ACCOUNT_ROLE } from '@shared/ts';
 import { pick } from 'lodash';
+import { Service } from 'typedi';
 
-namespace AccountRepository {
-  const filterAccount = (account: Account) =>
-    pick(account.toJSON(), [
+@Service()
+export default class AccountRepository {
+  private repository = sequelize.getRepository(Account);
+
+  private filter(account: Account) {
+    return pick(account.toJSON(), [
       'id',
       'email',
       'role',
@@ -19,11 +23,10 @@ namespace AccountRepository {
       'updatedAt',
       'verifiedAt',
     ]);
+  }
 
-  export const repository = sequelize.getRepository(Account);
-
-  export const login = async ({ email, password }: Credential, transaction?: Transaction) => {
-    const account = await find({ email }, transaction).catch(() =>
+  public async login({ email, password }: Credential, transaction?: Transaction) {
+    const account = await this.find({ email }, transaction).catch(() =>
       Promise.reject(new InvalidCredentialsError()),
     );
 
@@ -37,15 +40,15 @@ namespace AccountRepository {
       throw new InvalidCredentialsError();
     }
 
-    const jwt = jwtManager.sign(account, filterAccount(account));
+    const jwt = jwtManager.sign(account, this.filter(account));
     return { jwt, account };
-  };
+  }
 
-  export const signup = ({ email, password }: Credential, transaction?: Transaction) => {
+  public signup({ email, password }: Credential, transaction?: Transaction) {
     const opts = transaction ? { transaction } : {};
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-    return repository.create(
+    return this.repository.create(
       {
         email,
         salt,
@@ -55,17 +58,19 @@ namespace AccountRepository {
       },
       opts,
     );
-  };
+  }
 
-  export const find = async (where: WhereOptions, transaction?: Transaction) => {
+  public async find(where: WhereOptions, transaction?: Transaction) {
     const opts = transaction ? { transaction } : {};
-    const account = await repository.findOne({ where, ...opts });
+    const account = await this.repository.findOne({ where, ...opts });
     if (!account) {
       throw new ResourceNotFoundError('account');
     }
 
     return account;
-  };
-}
+  }
 
-export default AccountRepository;
+  public findAll(opts?: FindOptions) {
+    return this.repository.findAll(opts);
+  }
+}

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
 import { JWTValidator } from '@shared/services';
-import Account from '@src/models/account';
+import { Account } from '@src/models';
 
 const KEY_FOLDER = `${__dirname}/../../assets/keys`;
 const PUBLIC_KEY = fs.readFileSync(`${KEY_FOLDER}/public.key`, 'utf8');

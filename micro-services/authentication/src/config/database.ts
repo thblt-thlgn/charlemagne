@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import ENVIRONMENT from './environment';
+import * as models from '@src/models';
 
 export const sequelize = new Sequelize({
   host: ENVIRONMENT.DB_HOST,
@@ -14,10 +15,5 @@ export const sequelize = new Sequelize({
     idle: ENVIRONMENT.DB_POOL_IDLE,
   },
   repositoryMode: true,
-  models: [`${__dirname}/../entity/**/model.ts`],
+  models: Object.values(models),
 });
-
-export const models = {
-  RefreshToken: sequelize.models.RefreshToken,
-  Account: sequelize.models.Account,
-};
