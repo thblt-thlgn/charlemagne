@@ -6,6 +6,7 @@ import ENVIRONMENT from './environment';
 import * as resolvers from '@src/resolvers';
 import { extractRequestData } from '@src/utils/extract-request-data';
 import { Context } from '@src/ts';
+import { ApolloError } from 'apollo-server';
 
 const schema = buildSchemaSync({
   resolvers: Object.values(resolvers),
@@ -19,8 +20,10 @@ const server = new GraphQLServer({
   }),
 });
 
-server
-  .use(userAgent())
-  .start({ port: ENVIRONMENT.SERVER_PORT }, () =>
-    console.log(`The server is running on http://localhost:${ENVIRONMENT.SERVER_PORT}`),
-  );
+server.use(userAgent()).start(
+  {
+    port: ENVIRONMENT.SERVER_PORT,
+    formatError: (err: ApolloError) => err,
+  },
+  () => console.log(`The server is running on http://localhost:${ENVIRONMENT.SERVER_PORT}`),
+);

@@ -2,9 +2,11 @@ import { sequelize } from '@src/config/database';
 import { Account } from '@src/models';
 import { InvalidCredentialsError, ResourceNotFoundError, Credential } from '@src/ts';
 import { Transaction, WhereOptions, FindOptions } from 'sequelize/types';
+import { UniqueConstraintError } from 'sequelize';
 import * as crypto from 'crypto';
 import { ACCOUNT_ROLE } from '@shared/ts';
 import { Service } from 'typedi';
+import { UserInputError } from 'apollo-server';
 
 @Service()
 export default class AccountRepository {
@@ -28,20 +30,27 @@ export default class AccountRepository {
     return account;
   }
 
-  public signup({ email, password }: Credential, transaction?: Transaction) {
+  public async signup({ email, password }: Credential, transaction?: Transaction) {
     const opts = transaction ? { transaction } : {};
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-    return this.repository.create(
-      {
-        email,
-        salt,
-        hash,
-        role: [ACCOUNT_ROLE.USER],
-        verifiedAt: new Date(), // TODO: implement verification mechanism
-      },
-      opts,
-    );
+    try {
+      return await this.repository.create(
+        {
+          email,
+          salt,
+          hash,
+          role: [ACCOUNT_ROLE.USER],
+          verifiedAt: new Date(), // TODO: implement verification mechanism
+        },
+        opts,
+      );
+    } catch (e) {
+      if (e instanceof UniqueConstraintError) {
+        throw new UserInputError(`An account already exists with ${email} email`);
+      }
+      throw e;
+    }
   }
 
   public async find(where: WhereOptions, transaction?: Transaction) {
