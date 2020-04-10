@@ -35,4 +35,6 @@ class JWTManager extends JWTValidator {
   }
 }
 
-export const jwtManager = new JWTManager(PUBLIC_KEY, PRIVATE_KEY);
+const jwtManager = new JWTManager(PUBLIC_KEY, PRIVATE_KEY);
+
+export default jwtManager;

@@ -1,4 +1,3 @@
-import { sequelize } from '@src/config/database';
 import { Account } from '@src/models';
 import { InvalidCredentialsError, ResourceNotFoundError, Credential } from '@src/ts';
 import { Transaction, WhereOptions, FindOptions } from 'sequelize/types';
@@ -7,10 +6,11 @@ import * as crypto from 'crypto';
 import { ACCOUNT_ROLE } from '@shared/ts';
 import { Service } from 'typedi';
 import { UserInputError } from 'apollo-server';
+import db from '@src/config/database';
 
 @Service()
 export default class AccountRepository {
-  private repository = sequelize.getRepository(Account);
+  private repository = db.getRepository(Account);
 
   public async login({ email, password }: Credential, transaction?: Transaction) {
     const account = await this.find({ email }, transaction).catch(() =>

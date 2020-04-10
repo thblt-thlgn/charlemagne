@@ -3,10 +3,10 @@ import { AccountRepository, RefreshTokenRepository } from '@src/repositories';
 import { Service } from 'typedi';
 import { Context } from '@src/ts';
 import { Account } from '@src/models';
-import { sequelize } from '@src/config/database';
-import { jwtManager } from '@src/config/jwt-manager';
 import { CredentialInput } from './inputs';
 import { CredentialOutput } from './outputs';
+import db from '@src/config/database';
+import jwtManager from '@src/config/jwt-manager';
 
 @Service()
 @Resolver(Account)
@@ -33,7 +33,7 @@ export default class AccountResolver {
   ): Promise<CredentialOutput> {
     const { requestData } = ctx;
 
-    return sequelize.transaction(async (trx) => {
+    return db.transaction(async (trx) => {
       const account = await this.accountRepo.login(credentials, trx);
       const { id: refreshToken } = await this.refreshTokenRepo.create(account, requestData, trx);
       const jwt = jwtManager.sign(account);
@@ -49,7 +49,7 @@ export default class AccountResolver {
   ): Promise<CredentialOutput> {
     const { requestData } = ctx;
 
-    return sequelize.transaction(async (trx) => {
+    return db.transaction(async (trx) => {
       const account = await this.accountRepo.signup(credentials, trx);
       const jwt = jwtManager.sign(account);
       const { id: refreshToken } = await this.refreshTokenRepo.create(account, requestData, trx);

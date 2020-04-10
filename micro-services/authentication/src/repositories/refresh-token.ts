@@ -1,14 +1,14 @@
-import { sequelize } from '@src/config/database';
 import { RefreshToken, Account } from '../models';
 import { Service } from 'typedi';
 import { FindOptions, Transaction, WhereOptions } from 'sequelize/types';
 import { v4 as uuid } from 'uuid';
 import { add } from 'date-fns';
 import { ResourceNotFoundError, RequestData } from '@src/ts';
+import db from '@src/config/database';
 
 @Service()
 export default class RefreshTokenRepository {
-  private repository = sequelize.getRepository(RefreshToken);
+  private repository = db.getRepository(RefreshToken);
 
   public async find(where: WhereOptions, transaction?: Transaction) {
     const opts = transaction ? { transaction } : {};

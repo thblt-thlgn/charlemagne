@@ -2,8 +2,8 @@ import { RefreshToken } from '@src/models';
 import { Service } from 'typedi';
 import { Resolver, Mutation, Arg, Field, InputType, Query, Ctx } from 'type-graphql';
 import { RefreshTokenRepository, AccountRepository } from '@src/repositories';
-import { sequelize } from '@src/config/database';
-import { jwtManager } from '@src/config/jwt-manager';
+import db from '@src/config/database';
+import jwtManager from '@src/config/jwt-manager';
 import { Context } from 'graphql-yoga/dist/types';
 import { DisconnectInput, RefreshInput } from './inputs';
 import { CredentialOutput } from './outputs';
@@ -23,7 +23,7 @@ export default class RefreshTokenResolver {
 
   @Query(() => [RefreshToken])
   async refreshTokenList(
-    @Arg('accoundId', { nullable: true }) accountId?: number,
+    @Arg('accountId', { nullable: true }) accountId?: number,
   ): Promise<RefreshToken[]> {
     const opts = accountId ? { where: { accountId } } : {};
     return this.refreshTokenRepo.findAll(opts);
@@ -44,7 +44,7 @@ export default class RefreshTokenResolver {
     const { requestData } = ctx;
     const { refreshToken, accountId } = params;
 
-    return sequelize.transaction(async (trx) => {
+    return db.transaction(async (trx) => {
       const { id } = await this.refreshTokenRepo.refresh(refreshToken, accountId, requestData, trx);
       const account = await this.accountRepo.find({ id: accountId }, trx);
       const jwt = jwtManager.sign(account);

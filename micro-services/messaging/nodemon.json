@@ -1,0 +1,6 @@
+{
+  "ignore": ["dist"],
+  "execMap": {
+    "ts": "tsc --incremental && node dist"
+  }
+}
