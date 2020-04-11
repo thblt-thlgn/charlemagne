@@ -19,8 +19,8 @@ const server = new GraphQLServer({
 
 server.use(userAgent()).start(
   {
-    port: ENVIRONMENT.SERVER_PORT,
+    port: ENVIRONMENT.PORT,
     formatError: (err: ApolloError) => err,
   },
-  () => console.log(`The server is running on http://localhost:${ENVIRONMENT.SERVER_PORT}`),
+  () => console.log(`The server is running on http://localhost:${ENVIRONMENT.PORT}`),
 );

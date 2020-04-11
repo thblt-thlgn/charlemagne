@@ -4,7 +4,12 @@ import { Dialect } from 'sequelize/types';
 
 const ENVIRONMENT = {
   NODE_ENV: extractEnvironmentVariable('NODE_ENV'),
-  SERVER_PORT: extractEnvironmentVariable<number>('SERVER_PORT', 'integer'),
+  // SERVER
+  PORT: extractEnvironmentVariable<number>('PORT', 'integer'),
+  HOSTNAME: extractEnvironmentVariable('HOSTNAME'),
+  HTTPS_ENABLED: extractEnvironmentVariable<boolean>('HTTPS_ENABLED', 'boolean'),
+  SERVICE_NAME: extractEnvironmentVariable('SERVICE_NAME'),
+  // DATABASE
   DB_USERNAME: extractEnvironmentVariable(['DB_USERNAME', 'POSTGRES_USER']),
   DB_PASSWORD: extractEnvironmentVariable(['DB_PASSWORD', 'POSTGRES_PASSWORD']),
   DB_NAME: extractEnvironmentVariable('DB_NAME'),

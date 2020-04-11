@@ -31,13 +31,15 @@ export default class AccountResolver {
     @Arg('credentials') credentials: CredentialInput,
     @Ctx() ctx: Context,
   ): Promise<CredentialOutput> {
-    const { requestData } = ctx;
+    const { requestData, setCookies } = ctx;
 
     return db.transaction(async (trx) => {
       const account = await this.accountRepo.login(credentials, trx);
       const { id: refreshToken } = await this.refreshTokenRepo.create(account, requestData, trx);
       const jwt = jwtManager.sign(account);
 
+      setCookies('jwt', jwt);
+      setCookies('refreshToken', refreshToken);
       return { jwt, refreshToken };
     });
   }
@@ -47,13 +49,15 @@ export default class AccountResolver {
     @Arg('credentials') credentials: CredentialInput,
     @Ctx() ctx: Context,
   ): Promise<CredentialOutput> {
-    const { requestData } = ctx;
+    const { requestData, setCookies } = ctx;
 
     return db.transaction(async (trx) => {
       const account = await this.accountRepo.signup(credentials, trx);
       const jwt = jwtManager.sign(account);
       const { id: refreshToken } = await this.refreshTokenRepo.create(account, requestData, trx);
 
+      setCookies('jwt', jwt);
+      setCookies('refreshToken', refreshToken);
       return { jwt, refreshToken };
     });
   }

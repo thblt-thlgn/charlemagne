@@ -7,6 +7,7 @@ import * as resolvers from '@src/resolvers';
 import { extractRequestData } from '@src/utils/extract-request-data';
 import { Context } from '@src/ts';
 import { ApolloError } from 'apollo-server';
+import { add } from 'date-fns';
 
 const schema = buildSchemaSync({
   resolvers: Object.values(resolvers),
@@ -15,15 +16,26 @@ const schema = buildSchemaSync({
 
 const server = new GraphQLServer({
   schema,
-  context: ({ request }): Context => ({
+  context: ({ request, response }): Context => ({
     requestData: extractRequestData(request),
+    setCookies: (key, value) => {
+      const cookiesParams = {
+        secure: ENVIRONMENT.HTTPS_ENABLED,
+        path: '/',
+        domain: ENVIRONMENT.HOSTNAME,
+        expires: add(new Date(), { weeks: 1 }),
+        sameSite: true,
+      };
+
+      response.cookie(key, value, cookiesParams);
+    },
   }),
 });
 
 server.use(userAgent()).start(
   {
-    port: ENVIRONMENT.SERVER_PORT,
+    port: ENVIRONMENT.PORT,
     formatError: (err: ApolloError) => err,
   },
-  () => console.log(`The server is running on http://localhost:${ENVIRONMENT.SERVER_PORT}`),
+  () => console.log(`The server is running on http://localhost:${ENVIRONMENT.PORT}`),
 );
